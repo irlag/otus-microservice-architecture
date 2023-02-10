@@ -14,6 +14,6 @@ var routes = Routes{
 	Healthcheck: Route{
 		Name:   "healthcheck",
 		Method: "GET",
-		Path:   "/healthcheck",
+		Path:   "/health",
 	},
 }

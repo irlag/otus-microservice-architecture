@@ -25,7 +25,7 @@ func NewConfig() (*Config, error) {
 
 	config := &Config{
 		BindAddress: "0.0.0.0",
-		Port:        "8080",
+		Port:        "8000",
 		Debug:       false,
 	}
 
