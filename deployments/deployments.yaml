@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-microservice-architecture-app
+  labels:
+    app: otus-microservice-architecture-app
+    release: otus-microservice-architecture
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: otus-microservice-architecture-app
+      release: otus-microservice-architecture
+  template:
+    metadata:
+      labels:
+        app: otus-microservice-architecture-app
+        release: otus-microservice-architecture
+    spec:
+      containers:
+        - name: otus-microservice-architecture-app
+          image: irlag/otus-microservice-architecture:latest
+          imagePullPolicy: Always
+          args: ["application"]
+          ports:
+            - name: web
+              containerPort: 80
