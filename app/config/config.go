@@ -10,17 +10,24 @@ import (
 type Config struct {
 	BindAddress string `envconfig:"BIND_ADDRESS"`
 	Port        string `envconfig:"PORT"`
-	Debug       bool   `envconfig:"DEBUG"`
+	DB          *DBConfig
+	Migrate     Migrate `envconfig:"MIGRATE"`
+	Debug       bool    `envconfig:"DEBUG"`
 }
 
 func NewConfig() (*Config, error) {
 	env := os.Getenv("APP_ENV")
 
-	godotenv.Load(".env." + env + ".local")
+	if env != "" {
+		godotenv.Load(".env." + env + ".local")
+	}
+
 	if "test" != env {
 		godotenv.Load(".env.local")
 	}
-	godotenv.Load(".env." + env)
+	if env != "" {
+		godotenv.Load(".env." + env)
+	}
 	godotenv.Load() // The Original .env
 
 	config := &Config{

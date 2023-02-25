@@ -19,6 +19,7 @@ var consoleCmd = &cobra.Command{
 func init() {
 	consoleCmd.AddCommand(apiServer)
 	consoleCmd.AddCommand(version)
+	consoleCmd.AddCommand(migrateCmd)
 }
 
 func Execute() {

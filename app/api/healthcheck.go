@@ -27,7 +27,7 @@ func (h *Healthcheck) Check() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		status, err := h.processors.HealthcheckProcessor.Check()
 		if err != nil {
-			response := responses.NewErrorResponse(http.StatusBadRequest, err.Error())
+			response := responses.NewErrorResponse(http.StatusBadRequest, err)
 			response.WriteErrorResponse(writer)
 
 			return
