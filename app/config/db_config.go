@@ -9,6 +9,7 @@ type DBConfig struct {
 	User            string
 	Password        string
 	Host            string
+	Port            string
 	Database        string
 	MaxIdleConns    int           `envconfig:"DB_MAX_IDLE_CONNS" default:"2"`
 	MaxIdleConnTime time.Duration `envconfig:"DB_MAX_IDLE_CONN_TIME" default:"5m"`
@@ -19,11 +20,12 @@ type DBConfig struct {
 
 func (db *DBConfig) GetDSN() string {
 	return fmt.Sprintf(
-		"%s://%s:%s@%s/%s?sslmode=disable&binary_parameters=yes",
+		"%s://%s:%s@%s:%s/%s?sslmode=disable&binary_parameters=yes",
 		db.Driver,
 		db.User,
 		db.Password,
 		db.Host,
+		db.Port,
 		db.Database,
 	)
 }

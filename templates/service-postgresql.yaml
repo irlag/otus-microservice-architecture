@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+  labels:
+    app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.postgresql.service.type }}
+  ports:
+    - port: {{ .Values.postgresql.service.port }}
+      targetPort: tcp-postgresql
+      name: tcp-postgresql
+  selector:
+    app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql

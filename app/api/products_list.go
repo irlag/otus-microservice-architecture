@@ -13,7 +13,7 @@ func (p *Products) List() http.HandlerFunc {
 
 		products, err := p.processors.ProductsProcessor.List(request.Context(), paginated.GetLimit(), paginated.GetOffset())
 		if err != nil {
-			responses.NewErrorResponse(http.StatusBadRequest, err).WriteErrorResponse(writer)
+			responses.NewErrorResponse(http.StatusInternalServerError, err).WriteErrorResponse(writer)
 
 			return
 		}
