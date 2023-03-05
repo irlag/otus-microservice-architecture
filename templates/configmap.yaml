@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-env-app
+  name: {{ .Release.Name }}-configmap
+  namespace: {{ .Release.Namespace }}
   annotations:
     releaseRevision: "{{ .Release.Revision }}"
 data:

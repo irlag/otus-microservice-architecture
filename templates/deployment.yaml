@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "otus-microservice-architecture.fullname" . }}-app
+  name: {{ include "otus-microservice-architecture.fullname" . }}-app-v1
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "otus-microservice-architecture.labels" . | nindent 4 }}
     app: {{ include "otus-microservice-architecture.fullname" . }}-app
     release: {{ .Release.Name }}
+    version: v1
 spec:
   replicas: {{ .Values.replicaCount }}
   strategy:
@@ -13,6 +15,8 @@ spec:
   selector:
     matchLabels:
       {{- include "otus-microservice-architecture.selectorLabels" . | nindent 6 }}
+      app: {{ include "otus-microservice-architecture.fullname" . }}-app
+      version: v1
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -23,6 +27,7 @@ spec:
         {{- include "otus-microservice-architecture.selectorLabels" . | nindent 8 }}
         app: {{ include "otus-microservice-architecture.fullname" . }}-app
         release: {{ .Release.Name }}
+        version: v1
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -57,17 +62,107 @@ spec:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_PASSWORD
           {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-env-app
+                name: {{ .Release.Name }}-configmap
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "otus-microservice-architecture.fullname" . }}-app-v2
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "otus-microservice-architecture.labels" . | nindent 4 }}
+    app: {{ include "otus-microservice-architecture.fullname" . }}-app
+    release: {{ .Release.Name }}
+    version: v2
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "otus-microservice-architecture.selectorLabels" . | nindent 6 }}
+      app: {{ include "otus-microservice-architecture.fullname" . }}-app
+      version: v2
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "otus-microservice-architecture.selectorLabels" . | nindent 8 }}
+        app: {{ include "otus-microservice-architecture.fullname" . }}-app
+        release: {{ .Release.Name }}
+        version: v2
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "otus-microservice-architecture.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-app
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          args: ["application"]
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.secret.enabled }}
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: DB_PASSWORD
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-configmap
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

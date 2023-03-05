@@ -5,6 +5,7 @@ metadata:
   labels:
     app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
     release: {{ .Release.Name }}
+    version: v1
 spec:
   serviceName: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
   replicas: {{ .Values.postgresql.replicaCount }}
@@ -16,6 +17,7 @@ spec:
       labels:
         app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
         release: {{ .Release.Name }}
+        version: v1
     spec:
       serviceAccountName: {{ include "otus-microservice-architecture.serviceAccountName" . }}-postgresql
       containers:
@@ -33,21 +35,21 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Release.Name }}-env-app
+                  name: {{ .Release.Name }}-configmap
                   key: DB_DATABASE
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-env-app
+                name: {{ .Release.Name }}-configmap
           volumeMounts:
             - name: data
               mountPath: {{ .Values.postgresql.persistence.mountPath }}
