@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "otus-microservice-architecture.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "otus-microservice-architecture.labels" . | nindent 4 }}
     release: {{ .Release.Name }}
@@ -13,4 +14,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "otus-microservice-architecture.selectorLabels" . | nindent 4 }}
+    app: {{ include "otus-microservice-architecture.fullname" . }}-app

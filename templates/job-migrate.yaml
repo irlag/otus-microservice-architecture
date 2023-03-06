@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "otus-microservice-architecture.fullname" . }}-migrate
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ include "otus-microservice-architecture.fullname" . }}-migrate
     release: {{ .Release.Name }}
@@ -9,7 +10,10 @@ spec:
   template:
     metadata:
       name: {{ include "otus-microservice-architecture.fullname" . }}-migrate
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
+      serviceAccountName: {{ include "otus-microservice-architecture.serviceAccountName" . }}-postgresql
       restartPolicy: Never
       initContainers:
         - name: {{ .Chart.Name }}-check-ready-postgresql
@@ -19,11 +23,11 @@ spec:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_USER
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-env-app
+                name: {{ .Release.Name }}-configmap
           command:
             - "sh"
             - "-c"
@@ -40,14 +44,14 @@ spec:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-secret-app
+                  name: {{ .Release.Name }}-secret
                   key: DB_PASSWORD
           {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}-env-app
+                name: {{ .Release.Name }}-configmap

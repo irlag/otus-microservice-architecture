@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ include "otus-microservice-architecture.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: {{ include "otus-microservice-architecture.fullname" . }}
+  subsets:
+    - name: v1
+      labels:
+        app: {{ include "otus-microservice-architecture.fullname" . }}-app
+        version: v1
+    - name: v2
+      labels:
+        app: {{ include "otus-microservice-architecture.fullname" . }}-app
+        version: v2
