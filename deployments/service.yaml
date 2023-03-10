@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: otus-microservice-architecture-app
+  labels:
+    app: otus-microservice-architecture-app
+    release: otus-microservice-architecture
+spec:
+  selector:
+    app: otus-microservice-architecture-app
+    release: otus-microservice-architecture
+  ports:
+    - port: 8000
+      targetPort: web
+      protocol: TCP
+      name: web
+#  type: NodePort

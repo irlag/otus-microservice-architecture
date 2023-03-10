@@ -36,9 +36,9 @@ func easyjsonE37f3ad8DecodeOtusMicroserviceArchitectureAppApiResponses(in *jlexe
 			continue
 		}
 		switch key {
-		case "Code":
+		case "code":
 			out.Code = int(in.Int())
-		case "Message":
+		case "message":
 			out.Message = string(in.String())
 		default:
 			in.SkipRecursive()
@@ -55,12 +55,12 @@ func easyjsonE37f3ad8EncodeOtusMicroserviceArchitectureAppApiResponses(out *jwri
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"Code\":"
+		const prefix string = ",\"code\":"
 		out.RawString(prefix[1:])
 		out.Int(int(in.Code))
 	}
 	{
-		const prefix string = ",\"Message\":"
+		const prefix string = ",\"message\":"
 		out.RawString(prefix)
 		out.String(string(in.Message))
 	}
