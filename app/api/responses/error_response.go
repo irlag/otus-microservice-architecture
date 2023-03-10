@@ -8,14 +8,14 @@ import (
 
 //easyjson:json
 type ErrorResponse struct {
-	Code    int
-	Message string
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
-func NewErrorResponse(code int, message string) ErrorResponse {
-	return ErrorResponse{
+func NewErrorResponse(code int, err error) *ErrorResponse {
+	return &ErrorResponse{
 		Code:    code,
-		Message: message,
+		Message: err.Error(),
 	}
 }
 

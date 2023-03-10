@@ -2,17 +2,18 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 	"go.uber.org/zap"
 
 	"otus-microservice-architecture/app/api"
 	"otus-microservice-architecture/app/config"
 	appProcessors "otus-microservice-architecture/app/processors"
+	db "otus-microservice-architecture/app/storage/db/sqlc"
 )
 
 type Server struct {
@@ -23,9 +24,8 @@ type Server struct {
 
 func New(config *config.Config) *Server {
 	logger, err := NewLogger(config.Debug)
-
 	if err != nil {
-		log.Fatalf("can't initialize zap logger: %v", err)
+		logger.Fatal("can't initialize zap logger", zap.Error(err))
 	}
 
 	server := &Server{
@@ -33,11 +33,18 @@ func New(config *config.Config) *Server {
 		Logger: logger,
 	}
 
+	store := db.NewStore()
+	err = store.Open(config.DB)
+	if err != nil {
+		logger.Fatal("can't initialize db store", zap.Error(err))
+	}
+
 	server.Router = NewRouter()
 
-	processors := appProcessors.NewProcessor(logger)
+	processors := appProcessors.NewProcessor(store, logger)
 
 	api.NewHealthcheckApi(processors).HandleMethods(server.Router)
+	api.NewProductsApi(processors).HandleMethods(server.Router)
 
 	return server
 }

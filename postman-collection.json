@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "08a3bef8-0441-4eda-b40d-df9e67002f57",
+		"name": "Otus Microservice Architecture",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2280777"
+	},
+	"item": [
+		{
+			"name": "create product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Host",
+						"value": "arch.homework",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Nike\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/products",
+					"host": [
+						"{{OtusMicroserviceArchitectureUrl}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Host",
+						"value": "arch.homework",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Reebok\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
+					"host": [
+						"{{OtusMicroserviceArchitectureUrl}}"
+					],
+					"path": [
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "arch.homework",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/products",
+					"host": [
+						"{{OtusMicroserviceArchitectureUrl}}"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete product",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Host",
+						"value": "arch.homework",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/products/2",
+					"host": [
+						"{{OtusMicroserviceArchitectureUrl}}"
+					],
+					"path": [
+						"products",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get product",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "arch.homework",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
+					"host": [
+						"{{OtusMicroserviceArchitectureUrl}}"
+					],
+					"path": [
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+  labels:
+    app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+    release: {{ .Release.Name }}
+spec:
+  serviceName: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+  replicas: {{ .Values.postgresql.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+  template:
+    metadata:
+      labels:
+        app: {{ include "otus-microservice-architecture.fullname" . }}-postgresql
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ include "otus-microservice-architecture.serviceAccountName" . }}-postgresql
+      containers:
+        - name: {{ .Chart.Name }}-postgresql
+          image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+          ports:
+            - name: tcp-postgresql
+              containerPort: {{ .Values.postgresql.service.port }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: PGDATA
+              value: {{ .Values.postgresql.dataDir | quote }}
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret-app
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret-app
+                  key: DB_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-env-app
+                  key: DB_DATABASE
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-env-app
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.postgresql.persistence.mountPath }}
+              subPath: {{ .Values.postgresql.persistence.subPath }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      {{- range .Values.postgresql.persistence.accessModes }}
+        - {{ . | quote }}
+      {{- end }}
+      storageClassName: {{ .Values.postgresql.persistence.storageClassName }}
+      resources:
+        requests:
+          storage: {{ .Values.postgresql.persistence.size }}
