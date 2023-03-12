@@ -3,6 +3,9 @@ package errors
 import "errors"
 
 var (
-	ProductNotFound   = errors.New("product not found")
-	ProductNotDeleted = errors.New("product not deleted")
+	ProductNotFoundError      = errors.New("product not found")
+	ProductNotDeletedError    = errors.New("product not deleted")
+	UserNotFoundError         = errors.New("user not found")
+	UserNotDeletedError       = errors.New("user not deleted")
+	InvalidCredentionalsError = errors.New("invalid user or password")
 )

@@ -7,72 +7,348 @@
 	},
 	"item": [
 		{
-			"name": "create product",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Host",
-						"value": "arch.homework",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Nike\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "product",
+			"item": [
+				{
+					"name": "create product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Nike\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/products",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"products"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{OtusMicroserviceArchitectureUrl}}/products",
-					"host": [
-						"{{OtusMicroserviceArchitectureUrl}}"
-					],
-					"path": [
-						"products"
-					]
+				{
+					"name": "update product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Reebok\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/product",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/product/2",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"product",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "update product",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Host",
-						"value": "arch.homework",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Reebok\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "user",
+			"item": [
+				{
+					"name": "get user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Nzg2MjA0MzgsImlhdCI6MTY3ODYxOTgzOCwic3ViIjoiYXV0aCIsInVzZXIiOiJpcmxhZ0B5YW5kZXgucnUifQ.6wXXM0VLwIVCDc7feSuLYRYvCVeyD_T2foIH6HGFFfI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/user/5",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"user",
+								"5"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
-					"host": [
-						"{{OtusMicroserviceArchitectureUrl}}"
-					],
-					"path": [
-						"products",
-						"1"
-					]
+				{
+					"name": "update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Nzg2MjIxMDksImlhdCI6MTY3ODYyMTUwOSwic3ViIjoiYXV0aCIsInVzZXIiOiJpcmxhZ0B5YW5kZXgucnUifQ.sSlW_rI5nH5dVLk1vq_MuLwXKdG0k-N46NMHVVeqiBk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"irlag@yandex.ru\",\n    \"first_name\": \"Acamaz\",\n    \"last_name\": \"Naldikoev\",\n    \"password\": \"qwerty123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/user/7",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"user",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Nzg2MjA0MzgsImlhdCI6MTY3ODYxOTgzOCwic3ViIjoiYXV0aCIsInVzZXIiOiJpcmxhZ0B5YW5kZXgucnUifQ.6wXXM0VLwIVCDc7feSuLYRYvCVeyD_T2foIH6HGFFfI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/user/6",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"user",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"irlag@yandex.ru\",\n    \"first_name\": \"Acamaz\",\n    \"last_name\": \"Naldikoev\",\n    \"password\": \"qwerty123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/user?Host=arch.homework",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "Host",
+									"value": "arch.homework"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "get products",
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							},
+							{
+								"key": "Origin",
+								"value": "http://example.com",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"irlag@yandex.ru\",\n    \"password\": \"qwerty123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/auth/login",
+							"host": [
+								"{{OtusMicroserviceArchitectureUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -83,60 +359,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{OtusMicroserviceArchitectureUrl}}/products",
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/health",
 					"host": [
 						"{{OtusMicroserviceArchitectureUrl}}"
 					],
 					"path": [
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete product",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Host",
-						"value": "arch.homework",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{OtusMicroserviceArchitectureUrl}}/products/2",
-					"host": [
-						"{{OtusMicroserviceArchitectureUrl}}"
-					],
-					"path": [
-						"products",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get product",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Host",
-						"value": "arch.homework",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
-					"host": [
-						"{{OtusMicroserviceArchitectureUrl}}"
-					],
-					"path": [
-						"products",
-						"1"
+						"health"
 					]
 				}
 			},
