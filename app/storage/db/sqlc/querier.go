@@ -10,12 +10,18 @@ import (
 
 type Querier interface {
 	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error)
 	DeleteProduct(ctx context.Context, id int64) (int64, error)
+	DeleteUser(ctx context.Context, id int64) (int64, error)
 	GetProduct(ctx context.Context, id int64) (Product, error)
 	GetProductForUpdate(ctx context.Context, id int64) (Product, error)
+	GetUser(ctx context.Context, id int64) (User, error)
+	GetUserByEmail(ctx context.Context, email string) (User, error)
+	GetUserForUpdate(ctx context.Context, id int64) (User, error)
 	ListProduct(ctx context.Context, arg ListProductParams) ([]Product, error)
 	ListProductCount(ctx context.Context) (int64, error)
 	UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

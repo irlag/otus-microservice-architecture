@@ -18,7 +18,9 @@ func NewLogger(debugMode bool) (*zap.Logger, error) {
 		return nil, err
 	}
 
-	defer logger.Sync()
+	defer func() {
+		_ = logger.Sync()
+	}()
 
 	return logger, nil
 }

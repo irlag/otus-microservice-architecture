@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Product struct {
@@ -19,4 +20,14 @@ type Product struct {
 	Rating          string         `db:"rating" json:"rating"`
 	VoteCount       int32          `db:"vote_count" json:"vote_count"`
 	VoteSum         int32          `db:"vote_sum" json:"vote_sum"`
+}
+
+type User struct {
+	ID        int64          `db:"id" json:"id"`
+	Email     string         `db:"email" json:"email"`
+	FirstName string         `db:"first_name" json:"first_name"`
+	LastName  sql.NullString `db:"last_name" json:"last_name"`
+	Password  string         `db:"password" json:"password"`
+	CreatedAt time.Time      `db:"created_at" json:"created_at"`
+	UpdatedAt sql.NullTime   `db:"updated_at" json:"updated_at"`
 }

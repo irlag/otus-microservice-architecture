@@ -2,7 +2,7 @@ include .env
 
 GOLANG_VERSION=1.19
 VERSION ?= $(shell git describe --tags 2> /dev/null || git rev-parse --short HEAD)
-NAMESPACE=irlag/otus-microservice-architecture
+NAMESPACE=irlag
 APP=otus-microservice-architecture
 
 .DEFAULT_GOAL := help
@@ -20,8 +20,8 @@ build: ## Build app
 	@docker build \
 			--build-arg VERSION=${VERSION} \
     		--build-arg GOLANG_VERSION=${GOLANG_VERSION} \
-    		--tag ${NAMESPACE}:${VERSION} \
-    		--tag ${NAMESPACE}:latest \
+    		--tag ${NAMESPACE}/${APP}:${VERSION} \
+			--tag ${NAMESPACE}/${APP}:latest \
     		--file Dockerfile \
     		.
 
@@ -55,12 +55,39 @@ remove: ## Down and remove all containers
 
 .PHONY: push
 push: ## Push image
-	docker push ${NAMESPACE}:${VERSION}
-	docker push ${NAMESPACE}:latest
+	docker push ${NAMESPACE}/${APP}:${VERSION}
+	docker push ${NAMESPACE}/${APP}:latest
 
 .PHONY: sqlc-generate
 sqlc-generate: ## Sqlc generate store
 	docker run --rm -v $(pwd):/src -w /src kjconroy/sqlc generate
+
+#
+# Deploy targets
+#
+.PHONY: create-ns
+create-ns:
+	kubectl create namespace ${NAMESPACE}
+
+.PHONY: helm-nginx
+helm-nginx: ## Install nginx controller
+	helm install nginx-controller nginx-stable/nginx-ingress --namespace ${NAMESPACE} --create-namespace
+
+.PHONY: helm-install
+helm-install: ## Deploy application using helm
+	helm install otus-microservice-architecture ./ --namespace ${NAMESPACE} --create-namespace
+
+.PHONY: helm-upgrade
+helm-upgrade: ## Upgrade application using helm
+	helm upgrade otus-microservice-architecture ./ --namespace ${NAMESPACE} --create-namespace
+
+.PHONY: helm-uninstall
+helm-uninstall: ## Uninstall application using helm
+	helm uninstall otus-microservice-architecture --namespace ${NAMESPACE}
+
+.PHONY: port-forward-psql
+port-forward-psql:
+	kubectl port-forward svc/otus-microservice-architecture-postgresql -n irlag 5432:5432
 
 #
 # Migrations targets
