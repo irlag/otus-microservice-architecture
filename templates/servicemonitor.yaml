@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "otus-microservice-architecture.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "otus-microservice-architecture.labels" . | nindent 4 }}
+    release: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "otus-microservice-architecture.fullname" . }}-app
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+    - port: http
+      scheme: http
+      interval: 15s

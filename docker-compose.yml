@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 
 services:
 
@@ -13,7 +13,8 @@ services:
     ports:
       - "8000:${PORT}"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     env_file:
       - .env
     volumes:
@@ -40,13 +41,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - TZ=UTC
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      TZ: UTC
     restart: unless-stopped
     healthcheck:
-      test: pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER} -h localhost || exit 1
+      test: pg_isready -q -d ${DB_DATABASE} -U ${DB_USER} -h localhost || exit 1
       interval: 5s
       start_period: 1m
     profiles:
@@ -61,13 +62,15 @@ services:
     container_name: otus-microservice-architecture-migrate
     image: "migrate/migrate:v4.13.0"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: on-failure
     volumes:
       - "./migrations:/migrations"
     profiles:
       - app
       - dependencies
+    command: [ "-path", "/migrations/", "-database", "postgres://otus-microservice-architecture:otus-microservice-architecture@db:5432/otus-microservice-architecture?sslmode=disable", "up" ]
     networks:
       otus-microservice-architecture:
         aliases:
