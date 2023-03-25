@@ -23,6 +23,13 @@ func (r *Routes) Find(name string) (Route, error) {
 }
 
 var AppRoutes = Routes{
+	"metrics": Route{
+		Name:   "metrics",
+		Method: "GET",
+		Path:   "/metrics",
+		Secure: false,
+	},
+
 	"healthcheck": Route{
 		Name:   "healthcheck",
 		Method: "GET",

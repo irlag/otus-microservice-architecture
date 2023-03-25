@@ -4,6 +4,7 @@ GOLANG_VERSION=1.19
 VERSION ?= $(shell git describe --tags 2> /dev/null || git rev-parse --short HEAD)
 NAMESPACE=irlag
 APP=otus-microservice-architecture
+POSTGRESQL_URL="postgres://$(APP):$(APP)@db:5432/$(APP)?sslmode=disable"
 
 .DEFAULT_GOAL := help
 
@@ -99,7 +100,7 @@ else
 	$(error Error. Set migration name. Example $$ make dev-migrate-create name=init)
 endif
 
-dev-migrate-down dev-migrate-up: POSTGRESQL_URL= "postgres://$(APP):$(APP)@db:5432/$(APP)?sslmode=disable"
+dev-migrate-down dev-migrate-up:
 dev-migrate-up:
 	$(info Start up migrations.)
 	docker-compose --profile dependencies run --rm --service-ports migrate -database $(POSTGRESQL_URL) -path /migrations/ up

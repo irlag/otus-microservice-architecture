@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
+
+	"otus-microservice-architecture/app/models"
 )
 
 func (a *Service) Authenticate(request *http.Request) (int, error) {
@@ -20,7 +22,7 @@ func (a *Service) Authenticate(request *http.Request) (int, error) {
 		return http.StatusUnauthorized, err
 	}
 
-	request = request.Clone(context.WithValue(request.Context(), ContextKey{}, token))
+	request = request.Clone(context.WithValue(request.Context(), models.RequestAuthToken, token))
 
 	return http.StatusOK, nil
 }

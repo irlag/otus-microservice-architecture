@@ -27,8 +27,6 @@ type Authenticator interface {
 	GenerateJWTToken(user string) (string, error)
 }
 
-type ContextKey struct{}
-
 type Config struct {
 	Log    *zap.Logger
 	Config *config.AuthConfig
