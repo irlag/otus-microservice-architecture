@@ -20,7 +20,9 @@ func NewHealthcheckApi(processors *processors.Processors) *Healthcheck {
 }
 
 func (h *Healthcheck) HandleMethods(router *mux.Router) {
-	router.HandleFunc(routes.Healthcheck.Path, h.Check()).Methods(routes.Healthcheck.Method)
+	router.HandleFunc(AppRoutes["healthcheck"].Path, h.Check()).
+		Methods(AppRoutes["healthcheck"].Method).
+		Name(AppRoutes["healthcheck"].Name)
 }
 
 func (h *Healthcheck) Check() http.HandlerFunc {

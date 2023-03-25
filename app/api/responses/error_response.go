@@ -21,5 +21,6 @@ func NewErrorResponse(code int, err error) *ErrorResponse {
 
 func (e *ErrorResponse) WriteErrorResponse(rw http.ResponseWriter) {
 	result, _ := e.MarshalJSON()
+
 	WriteJsonResponse(rw, e.Code, result)
 }

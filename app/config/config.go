@@ -13,6 +13,7 @@ type Config struct {
 	DB          *DBConfig
 	Migrate     Migrate `envconfig:"MIGRATE"`
 	Debug       bool    `envconfig:"DEBUG"`
+	Auth        *AuthConfig
 }
 
 func NewConfig() (*Config, error) {
