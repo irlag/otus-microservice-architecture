@@ -15,3 +15,5 @@ data:
   DB_MAX_IDLE_CONN_TIME: "5m"
   DB_MAX_CONNS: "20"
   DB_CONN_MAX_LIFETIME: "10m"
+  AUTH_TOKEN_TTL: "10m"
+  AUTH_JWT_SECRET_KEY: "some_jwt_secret"
