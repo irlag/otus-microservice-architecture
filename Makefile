@@ -4,6 +4,7 @@ GOLANG_VERSION=1.19
 VERSION ?= $(shell git describe --tags 2> /dev/null || git rev-parse --short HEAD)
 NAMESPACE=irlag
 APP=otus-microservice-architecture
+POSTGRESQL_URL="postgres://$(APP):$(APP)@db:5432/$(APP)?sslmode=disable"
 
 .DEFAULT_GOAL := help
 
@@ -85,9 +86,25 @@ helm-upgrade: ## Upgrade application using helm
 helm-uninstall: ## Uninstall application using helm
 	helm uninstall otus-microservice-architecture --namespace ${NAMESPACE}
 
+.PHONY: helm-install-prom
+helm-install-prom: ## Install prometheus using helm
+	helm install prometheus bitnami/kube-prometheus --namespace ${NAMESPACE}
+
+.PHONY: helm-install-grafana
+helm-install-grafana: ## Install grafana using helm
+	helm install grafana grafana/grafana --namespace ${NAMESPACE}
+
 .PHONY: port-forward-psql
-port-forward-psql:
+port-forward-psql: ## Port app forward
 	kubectl port-forward svc/otus-microservice-architecture-postgresql -n irlag 5432:5432
+
+.PHONY: port-forward-grafana
+port-forward-grafana: ## Port grafana forward
+	kubectl port-forward svc/grafana -n irlag 8081:80
+
+.PHONY: port-forward-prom
+port-forward-prom: ## Port prometheus forward
+	kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n irlag 9090:9090
 
 #
 # Migrations targets
@@ -99,7 +116,7 @@ else
 	$(error Error. Set migration name. Example $$ make dev-migrate-create name=init)
 endif
 
-dev-migrate-down dev-migrate-up: POSTGRESQL_URL= "postgres://$(APP):$(APP)@db:5432/$(APP)?sslmode=disable"
+dev-migrate-down dev-migrate-up:
 dev-migrate-up:
 	$(info Start up migrations.)
 	docker-compose --profile dependencies run --rm --service-ports migrate -database $(POSTGRESQL_URL) -path /migrations/ up

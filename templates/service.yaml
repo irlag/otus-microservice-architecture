@@ -4,6 +4,7 @@ metadata:
   name: {{ include "otus-microservice-architecture.fullname" . }}
   labels:
     {{- include "otus-microservice-architecture.labels" . | nindent 4 }}
+    app: {{ include "otus-microservice-architecture.fullname" . }}-app
     release: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.type }}
@@ -13,4 +14,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "otus-microservice-architecture.selectorLabels" . | nindent 4 }}
+    app: {{ include "otus-microservice-architecture.fullname" . }}-app
