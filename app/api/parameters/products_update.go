@@ -19,6 +19,7 @@ type ProductsUpdateParams struct {
 	CountryOfOrigin string `json:"country_of_origin"`
 	Description     string `json:"description"`
 	Price           string `json:"price"`
+	Version         string `json:"version"`
 }
 
 func NewProductsUpdateParamsFromRequest(request *http.Request) (ProductsUpdateParams, error) {

@@ -52,6 +52,8 @@ func easyjson6c1ab7dcDecodeOtusMicroserviceArchitectureAppApiResponses(in *jlexe
 			out.Price = string(in.String())
 		case "rating":
 			out.Rating = string(in.String())
+		case "version":
+			out.Version = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -105,6 +107,11 @@ func easyjson6c1ab7dcEncodeOtusMicroserviceArchitectureAppApiResponses(out *jwri
 		const prefix string = ",\"rating\":"
 		out.RawString(prefix)
 		out.String(string(in.Rating))
+	}
+	{
+		const prefix string = ",\"version\":"
+		out.RawString(prefix)
+		out.String(string(in.Version))
 	}
 	out.RawByte('}')
 }

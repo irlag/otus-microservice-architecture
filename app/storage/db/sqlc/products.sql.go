@@ -8,19 +8,22 @@ package db
 import (
 	"context"
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
-const createProduct = `-- name: CreateProduct :one
+const CreateProduct = `-- name: CreateProduct :one
 INSERT INTO products (
     name,
     article,
     brand,
     country_of_origin,
     description,
-    price
+    price,
+    version
 ) VALUES (
-     $1, $2, $3, $4, $5, $6
- ) RETURNING id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum
+     $1, $2, $3, $4, $5, $6, $7
+ ) RETURNING id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum, version
 `
 
 type CreateProductParams struct {
@@ -30,16 +33,18 @@ type CreateProductParams struct {
 	CountryOfOrigin string         `db:"country_of_origin" json:"country_of_origin"`
 	Description     sql.NullString `db:"description" json:"description"`
 	Price           string         `db:"price" json:"price"`
+	Version         uuid.UUID      `db:"version" json:"version"`
 }
 
 func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error) {
-	row := q.db.QueryRowContext(ctx, createProduct,
+	row := q.db.QueryRowContext(ctx, CreateProduct,
 		arg.Name,
 		arg.Article,
 		arg.Brand,
 		arg.CountryOfOrigin,
 		arg.Description,
 		arg.Price,
+		arg.Version,
 	)
 	var i Product
 	err := row.Scan(
@@ -53,30 +58,31 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (P
 		&i.Rating,
 		&i.VoteCount,
 		&i.VoteSum,
+		&i.Version,
 	)
 	return i, err
 }
 
-const deleteProduct = `-- name: DeleteProduct :execrows
+const DeleteProduct = `-- name: DeleteProduct :execrows
 DELETE FROM products
 WHERE id = $1
 `
 
 func (q *Queries) DeleteProduct(ctx context.Context, id int64) (int64, error) {
-	result, err := q.db.ExecContext(ctx, deleteProduct, id)
+	result, err := q.db.ExecContext(ctx, DeleteProduct, id)
 	if err != nil {
 		return 0, err
 	}
 	return result.RowsAffected()
 }
 
-const getProduct = `-- name: GetProduct :one
-SELECT id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum FROM products
+const GetProduct = `-- name: GetProduct :one
+SELECT id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum, version FROM products
 WHERE id = $1
 `
 
 func (q *Queries) GetProduct(ctx context.Context, id int64) (Product, error) {
-	row := q.db.QueryRowContext(ctx, getProduct, id)
+	row := q.db.QueryRowContext(ctx, GetProduct, id)
 	var i Product
 	err := row.Scan(
 		&i.ID,
@@ -89,18 +95,19 @@ func (q *Queries) GetProduct(ctx context.Context, id int64) (Product, error) {
 		&i.Rating,
 		&i.VoteCount,
 		&i.VoteSum,
+		&i.Version,
 	)
 	return i, err
 }
 
-const getProductForUpdate = `-- name: GetProductForUpdate :one
-SELECT id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum FROM products
+const GetProductForUpdate = `-- name: GetProductForUpdate :one
+SELECT id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum, version FROM products
 WHERE id = $1 LIMIT 1
 FOR UPDATE
 `
 
 func (q *Queries) GetProductForUpdate(ctx context.Context, id int64) (Product, error) {
-	row := q.db.QueryRowContext(ctx, getProductForUpdate, id)
+	row := q.db.QueryRowContext(ctx, GetProductForUpdate, id)
 	var i Product
 	err := row.Scan(
 		&i.ID,
@@ -113,12 +120,13 @@ func (q *Queries) GetProductForUpdate(ctx context.Context, id int64) (Product, e
 		&i.Rating,
 		&i.VoteCount,
 		&i.VoteSum,
+		&i.Version,
 	)
 	return i, err
 }
 
-const listProduct = `-- name: ListProduct :many
-SELECT id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum FROM products
+const ListProduct = `-- name: ListProduct :many
+SELECT id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum, version FROM products
 ORDER BY id DESC
 LIMIT $1
 OFFSET $2
@@ -130,7 +138,7 @@ type ListProductParams struct {
 }
 
 func (q *Queries) ListProduct(ctx context.Context, arg ListProductParams) ([]Product, error) {
-	rows, err := q.db.QueryContext(ctx, listProduct, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, ListProduct, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -149,6 +157,7 @@ func (q *Queries) ListProduct(ctx context.Context, arg ListProductParams) ([]Pro
 			&i.Rating,
 			&i.VoteCount,
 			&i.VoteSum,
+			&i.Version,
 		); err != nil {
 			return nil, err
 		}
@@ -163,26 +172,27 @@ func (q *Queries) ListProduct(ctx context.Context, arg ListProductParams) ([]Pro
 	return items, nil
 }
 
-const listProductCount = `-- name: ListProductCount :one
+const ListProductCount = `-- name: ListProductCount :one
 SELECT count(*) FROM products
 `
 
 func (q *Queries) ListProductCount(ctx context.Context) (int64, error) {
-	row := q.db.QueryRowContext(ctx, listProductCount)
+	row := q.db.QueryRowContext(ctx, ListProductCount)
 	var count int64
 	err := row.Scan(&count)
 	return count, err
 }
 
-const updateProduct = `-- name: UpdateProduct :one
+const UpdateProduct = `-- name: UpdateProduct :one
 UPDATE products SET
     name = $2,
     article  = $3,
     brand = $4,
     country_of_origin = $5,
     description = $6,
-    price = $7
-WHERE id = $1 RETURNING id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum
+    price = $7,
+    version = $8
+WHERE id = $1 RETURNING id, name, article, brand, country_of_origin, description, price, rating, vote_count, vote_sum, version
 `
 
 type UpdateProductParams struct {
@@ -193,10 +203,11 @@ type UpdateProductParams struct {
 	CountryOfOrigin string         `db:"country_of_origin" json:"country_of_origin"`
 	Description     sql.NullString `db:"description" json:"description"`
 	Price           string         `db:"price" json:"price"`
+	Version         uuid.UUID      `db:"version" json:"version"`
 }
 
 func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error) {
-	row := q.db.QueryRowContext(ctx, updateProduct,
+	row := q.db.QueryRowContext(ctx, UpdateProduct,
 		arg.ID,
 		arg.Name,
 		arg.Article,
@@ -204,6 +215,7 @@ func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (P
 		arg.CountryOfOrigin,
 		arg.Description,
 		arg.Price,
+		arg.Version,
 	)
 	var i Product
 	err := row.Scan(
@@ -217,6 +229,7 @@ func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (P
 		&i.Rating,
 		&i.VoteCount,
 		&i.VoteSum,
+		&i.Version,
 	)
 	return i, err
 }

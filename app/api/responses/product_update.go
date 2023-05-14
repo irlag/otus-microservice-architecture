@@ -18,6 +18,7 @@ type ProductUpdateOkResponse struct {
 	Description     string `json:"description"`
 	Price           string `json:"price"`
 	Rating          string `json:"rating"`
+	Version         string `json:"version"`
 }
 
 func NewProductUpdateOkResponse(product db.Product) ProductUpdateOkResponse {
@@ -30,6 +31,7 @@ func NewProductUpdateOkResponse(product db.Product) ProductUpdateOkResponse {
 		Description:     product.Description.String,
 		Price:           product.Price,
 		Rating:          product.Rating,
+		Version:         product.Version.String(),
 	}
 }
 

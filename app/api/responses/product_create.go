@@ -18,6 +18,7 @@ type ProductCreateOkResponse struct {
 	Description     string `json:"description"`
 	Price           string `json:"price"`
 	Rating          string `json:"rating"`
+	Version         string `json:"version"`
 }
 
 func NewProductCreateOkResponse(product db.Product) ProductCreateOkResponse {
@@ -30,6 +31,7 @@ func NewProductCreateOkResponse(product db.Product) ProductCreateOkResponse {
 		Description:     product.Description.String,
 		Price:           product.Price,
 		Rating:          product.Rating,
+		Version:         product.Version.String(),
 	}
 }
 
