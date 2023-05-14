@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	BindAddress string `envconfig:"BIND_ADDRESS"`
+	BindAddress string `envconfig:"optional"`
 	Port        string `envconfig:"PORT"`
 	DB          *DBConfig
 	Migrate     Migrate `envconfig:"MIGRATE"`
@@ -32,9 +32,8 @@ func NewConfig() (*Config, error) {
 	godotenv.Load() // The Original .env
 
 	config := &Config{
-		BindAddress: "0.0.0.0",
-		Port:        "8000",
-		Debug:       false,
+		Port:  "8000",
+		Debug: false,
 	}
 
 	if err := envconfig.Init(config); err != nil {
