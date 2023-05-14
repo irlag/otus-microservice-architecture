@@ -11,6 +11,8 @@ type Store interface {
 	Open(config *config.DBConfig) error
 	Close() error
 	Querier
+	Transactional
+	WithTx(tx *sql.Tx) *Queries
 }
 
 // SQLStore provides all functions to execute SQL queries and transactions
@@ -51,4 +53,8 @@ func (s *SQLStore) Close() error {
 	}
 
 	return nil
+}
+
+func (s *SQLStore) Begin() (*sql.Tx, error) {
+	return s.db.Begin()
 }

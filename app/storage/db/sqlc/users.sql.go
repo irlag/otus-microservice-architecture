@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-const createUser = `-- name: CreateUser :one
+const CreateUser = `-- name: CreateUser :one
 INSERT INTO users (
     email,
     first_name,
@@ -38,7 +38,7 @@ type CreateUserRow struct {
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
-	row := q.db.QueryRowContext(ctx, createUser,
+	row := q.db.QueryRowContext(ctx, CreateUser,
 		arg.Email,
 		arg.FirstName,
 		arg.LastName,
@@ -55,26 +55,26 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateU
 	return i, err
 }
 
-const deleteUser = `-- name: DeleteUser :execrows
+const DeleteUser = `-- name: DeleteUser :execrows
 DELETE FROM users
 WHERE id = $1
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, id int64) (int64, error) {
-	result, err := q.db.ExecContext(ctx, deleteUser, id)
+	result, err := q.db.ExecContext(ctx, DeleteUser, id)
 	if err != nil {
 		return 0, err
 	}
 	return result.RowsAffected()
 }
 
-const getUser = `-- name: GetUser :one
+const GetUser = `-- name: GetUser :one
 SELECT id, email, first_name, last_name, password, created_at, updated_at FROM users
 WHERE id = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, id)
+	row := q.db.QueryRowContext(ctx, GetUser, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -88,13 +88,13 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	return i, err
 }
 
-const getUserByEmail = `-- name: GetUserByEmail :one
+const GetUserByEmail = `-- name: GetUserByEmail :one
 SELECT id, email, first_name, last_name, password, created_at, updated_at FROM users
 WHERE email = $1 LIMIT 1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+	row := q.db.QueryRowContext(ctx, GetUserByEmail, email)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -108,14 +108,14 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 	return i, err
 }
 
-const getUserForUpdate = `-- name: GetUserForUpdate :one
+const GetUserForUpdate = `-- name: GetUserForUpdate :one
 SELECT id, email, first_name, last_name, password, created_at, updated_at FROM users
 WHERE id = $1 LIMIT 1
 FOR UPDATE
 `
 
 func (q *Queries) GetUserForUpdate(ctx context.Context, id int64) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserForUpdate, id)
+	row := q.db.QueryRowContext(ctx, GetUserForUpdate, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -129,7 +129,7 @@ func (q *Queries) GetUserForUpdate(ctx context.Context, id int64) (User, error) 
 	return i, err
 }
 
-const updateUser = `-- name: UpdateUser :one
+const UpdateUser = `-- name: UpdateUser :one
 UPDATE users SET
     email = $2,
     first_name  = $3,
@@ -146,7 +146,7 @@ type UpdateUserParams struct {
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, updateUser,
+	row := q.db.QueryRowContext(ctx, UpdateUser,
 		arg.ID,
 		arg.Email,
 		arg.FirstName,

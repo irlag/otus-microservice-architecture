@@ -7,6 +7,8 @@ package db
 import (
 	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Product struct {
@@ -20,6 +22,7 @@ type Product struct {
 	Rating          string         `db:"rating" json:"rating"`
 	VoteCount       int32          `db:"vote_count" json:"vote_count"`
 	VoteSum         int32          `db:"vote_sum" json:"vote_sum"`
+	Version         uuid.UUID      `db:"version" json:"version"`
 }
 
 type User struct {

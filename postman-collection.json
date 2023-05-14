@@ -30,12 +30,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{OtusMicroserviceArchitectureUrl}}/products",
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/product",
 							"host": [
 								"{{OtusMicroserviceArchitectureUrl}}"
 							],
 							"path": [
-								"products"
+								"product"
 							]
 						}
 					},
@@ -54,7 +54,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Reebok\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\"\n}",
+							"raw": "{\n    \"name\": \"Кроссовки\",\n    \"article\": \"324566324566\",\n    \"brand\": \"Reebok\",\n    \"country_of_origin\": \"USA\",\n    \"price\": \"12300\",\n    \"version\": \"a1b2f568-f239-11ed-ad3f-acde48001122\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -62,12 +62,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/product/1",
 							"host": [
 								"{{OtusMicroserviceArchitectureUrl}}"
 							],
 							"path": [
-								"products",
+								"product",
 								"1"
 							]
 						}
@@ -76,6 +76,17 @@
 				},
 				{
 					"name": "get products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -133,12 +144,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{OtusMicroserviceArchitectureUrl}}/products/1",
+							"raw": "{{OtusMicroserviceArchitectureUrl}}/product/1",
 							"host": [
 								"{{OtusMicroserviceArchitectureUrl}}"
 							],
 							"path": [
-								"products",
+								"product",
 								"1"
 							]
 						}
@@ -365,6 +376,29 @@
 					],
 					"path": [
 						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "metrics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Host",
+						"value": "arch.homework",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{OtusMicroserviceArchitectureUrl}}/metrics",
+					"host": [
+						"{{OtusMicroserviceArchitectureUrl}}"
+					],
+					"path": [
+						"metrics"
 					]
 				}
 			},

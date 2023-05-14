@@ -50,6 +50,8 @@ func easyjsonCb6e909aDecodeOtusMicroserviceArchitectureAppApiParameters(in *jlex
 			out.Description = string(in.String())
 		case "price":
 			out.Price = string(in.String())
+		case "version":
+			out.Version = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -98,6 +100,11 @@ func easyjsonCb6e909aEncodeOtusMicroserviceArchitectureAppApiParameters(out *jwr
 		const prefix string = ",\"price\":"
 		out.RawString(prefix)
 		out.String(string(in.Price))
+	}
+	{
+		const prefix string = ",\"version\":"
+		out.RawString(prefix)
+		out.String(string(in.Version))
 	}
 	out.RawByte('}')
 }

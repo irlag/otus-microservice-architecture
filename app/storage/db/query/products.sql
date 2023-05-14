@@ -23,9 +23,10 @@ INSERT INTO products (
     brand,
     country_of_origin,
     description,
-    price
+    price,
+    version
 ) VALUES (
-     $1, $2, $3, $4, $5, $6
+     $1, $2, $3, $4, $5, $6, $7
  ) RETURNING *;
 
 -- name: UpdateProduct :one
@@ -35,7 +36,8 @@ UPDATE products SET
     brand = $4,
     country_of_origin = $5,
     description = $6,
-    price = $7
+    price = $7,
+    version = $8
 WHERE id = $1 RETURNING *;
 
 -- name: DeleteProduct :execrows
